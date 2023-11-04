@@ -72,3 +72,50 @@ int main() {
 	
 	// Pointers destroyed because they are owned by other states
 }
+
+/*
+
+Example output
+
+	can_enter a
+	can_enter b
+	can_enter d
+	on_enter a
+	on_enter b
+	on_enter d
+	1
+	====
+	can_exit d
+	can_enter c
+	on_exit d
+	on_enter c
+	1
+	====
+	can_exit c
+	can_enter d
+	on_exit c
+	on_enter d
+	1
+	====
+	can_exit d
+	can_enter d
+	on_exit d
+	on_enter d
+	1
+	====
+	can_exit d
+	can_exit b
+	can_exit a
+	can_enter e
+	0
+	====
+	process_event d
+	process_event b
+	1
+	destroy e
+	destroy a
+	destroy b
+	destroy d
+	destroy c
+
+*/
