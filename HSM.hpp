@@ -71,7 +71,7 @@ public:
 	
 protected:
 	// Lock update of HSM to one thread
-	std::mutex exec_mutex;
+	std::recursive_mutex exec_mutex;
 	
 	HSMState *current_state;
 };

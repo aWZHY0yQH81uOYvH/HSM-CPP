@@ -80,7 +80,7 @@ HSMState *HSMState::get_default_state() const {
 HSMachine::HSMachine(): current_state(this) {}
 
 bool HSMachine::process_event(HSMInfo *info) {
-	std::lock_guard<std::mutex> lock(exec_mutex);
+	std::lock_guard<std::recursive_mutex> lock(exec_mutex);
 	
 	// Deliver event info to current state and work up while they're returning false
 	HSMState *exec_state = current_state;
@@ -93,7 +93,7 @@ bool HSMachine::process_event(HSMInfo *info) {
 }
 
 bool HSMachine::transition_to(HSMState *new_state, HSMInfo *info) {
-	std::lock_guard<std::mutex> lock(exec_mutex);
+	std::lock_guard<std::recursive_mutex> lock(exec_mutex);
 	
 	// Exit if we're already in this state
 	if(current_state == new_state)
@@ -146,7 +146,7 @@ bool HSMachine::transition_to(HSMState *new_state, HSMInfo *info) {
 }
 
 HSMState *HSMachine::get_current_state() {
-	std::lock_guard<std::mutex> lock(exec_mutex);
+	std::lock_guard<std::recursive_mutex> lock(exec_mutex);
 	return current_state;
 }
 
