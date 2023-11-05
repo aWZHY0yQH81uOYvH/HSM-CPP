@@ -37,7 +37,7 @@ bool HSMState::process_event(HSMInfo *info) {
 	return false;
 }
 
-void HSMState::add_child_state(HSMState *state) {
+void HSMState::add_child_state(HSMState *state, bool default_state) {
 	// Apply new state tree information upwards
 	HSMState *target_state_ptr = this;
 	HSMState *source_state_ptr = state;
@@ -56,6 +56,10 @@ void HSMState::add_child_state(HSMState *state) {
 	
 	// Tell new state about us
 	state->parent_state = this;
+	
+	// Set as default state if requested
+	if(default_state)
+		set_default_state(state);
 }
 
 void HSMState::set_default_state(HSMState *state) {

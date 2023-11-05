@@ -33,7 +33,7 @@ public:
 	
 	// Add a child state
 	// Takes ownership of passed pointer
-	void add_child_state(HSMState *state);
+	void add_child_state(HSMState *state, bool default_state = false);
 	
 	// Set default state so when this state is entered (and no other child state is specified),
 	// it will automatically transition into this default state
