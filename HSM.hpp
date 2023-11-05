@@ -64,6 +64,9 @@ public:
 	// Returns false if the transition was not possible
 	bool transition_to(HSMState *new_state, HSMInfo *info = nullptr);
 	
+	// Returns true if current state is within the given state
+	bool within(HSMState *query);
+	
 	HSMState *get_current_state();
 	
 	// Allow addition of child states

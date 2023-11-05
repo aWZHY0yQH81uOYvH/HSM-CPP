@@ -145,6 +145,12 @@ bool HSMachine::transition_to(HSMState *new_state, HSMInfo *info) {
 	return true;
 }
 
+bool HSMachine::within(HSMState *query) {
+	std::lock_guard<std::recursive_mutex> lock(exec_mutex);
+	if(current_state == query) return true;
+	return query->child_states.find(current_state) != query->child_states.end();
+}
+
 HSMState *HSMachine::get_current_state() {
 	std::lock_guard<std::recursive_mutex> lock(exec_mutex);
 	return current_state;
