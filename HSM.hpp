@@ -5,6 +5,7 @@
 #include <mutex>
 #include <unordered_map>
 #include <utility>
+#include <functional>
 
 namespace HSM {
 
@@ -55,7 +56,7 @@ protected:
 // Base state machine class
 class HSMachine: protected HSMState {
 public:
-	HSMachine();
+	HSMachine(std::function<void(void)> transition_callback = []{});
 	
 	// Send an event to the active state and all parents until one consumes it
 	// Returns false if the event was not consumed
@@ -86,6 +87,9 @@ public:
 protected:
 	// Lock update of HSM to one thread
 	std::recursive_mutex exec_mutex;
+	
+	// Function called whenever a state transition is successful
+	std::function<void(void)> transition_callback;
 	
 	HSMState *current_state;
 };

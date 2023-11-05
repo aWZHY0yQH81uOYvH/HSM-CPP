@@ -10,7 +10,7 @@
 
 ### Usage
 
- 1. Create a main `HSMachine` class.
+ 1. Create a main `HSMachine` class. Optionally provide a callback function to run whenever a state transition happens in order to, for example, update a UI.
  2. Subclass `HSMState` to create your custom states, overriding the `on_*`, `can_*` and `process_event` functions if desired.
  3. Optionally extend `HSMInfo` to create structs of information that can be passed to your `HSMState`-derived classes whenever a state transition or event occurs.
  4. Allocate instances of your states, keeping pointers to them. Each pointer is an individual state, meaning you can have multiple states in the hierarchy that are represented by the same `HSMState`-derived class.

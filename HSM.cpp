@@ -81,7 +81,7 @@ HSMState *HSMState::get_default_state() const {
 }
 
 // HSM logic
-HSMachine::HSMachine(): current_state(this) {}
+HSMachine::HSMachine(std::function<void(void)> transition_callback): transition_callback(transition_callback), current_state(this) {}
 
 bool HSMachine::process_event(HSMInfo *info) {
 	std::lock_guard<std::recursive_mutex> lock(exec_mutex);
@@ -149,6 +149,8 @@ bool HSMachine::transition_to(HSMState *new_state, HSMInfo *info) {
 		current_state = current_state->default_state;
 		current_state->on_enter(info);
 	}
+	
+	transition_callback();
 	
 	return true;
 }

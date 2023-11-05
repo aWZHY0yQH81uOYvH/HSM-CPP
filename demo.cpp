@@ -42,7 +42,9 @@ private:
 };
 
 int main() {
-	HSMachine hsm;
+	HSMachine hsm([] {
+		cout << "transition callback" << endl;
+	});
 	
 	State *a = new State("a");
 	State *b = new State("b");
@@ -83,24 +85,28 @@ Example output
 	on_enter a
 	on_enter b
 	on_enter d
+	transition callback
 	1
 	====
 	can_exit d
 	can_enter c
 	on_exit d
 	on_enter c
+	transition callback
 	1
 	====
 	can_exit c
 	can_enter d
 	on_exit c
 	on_enter d
+	transition callback
 	1
 	====
 	can_exit d
 	can_enter d
 	on_exit d
 	on_enter d
+	transition callback
 	1
 	====
 	can_exit d
