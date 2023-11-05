@@ -92,6 +92,10 @@ bool HSMachine::process_event(HSMInfo *info) {
 	return false;
 }
 
+bool HSMachine::process_event(HSMInfo &info) {
+	return process_event(&info);
+}
+
 bool HSMachine::transition_to(HSMState *new_state, HSMInfo *info) {
 	std::lock_guard<std::recursive_mutex> lock(exec_mutex);
 	
@@ -143,6 +147,10 @@ bool HSMachine::transition_to(HSMState *new_state, HSMInfo *info) {
 	}
 	
 	return true;
+}
+
+bool HSMachine::transition_to(HSMState *new_state, HSMInfo &info) {
+	return transition_to(new_state, &info);
 }
 
 bool HSMachine::within(HSMState *query) {

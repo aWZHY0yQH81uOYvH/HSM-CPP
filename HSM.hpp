@@ -4,6 +4,7 @@
 
 #include <mutex>
 #include <unordered_map>
+#include <utility>
 
 namespace HSM {
 
@@ -59,10 +60,20 @@ public:
 	// Send an event to the active state and all parents until one consumes it
 	// Returns false if the event was not consumed
 	virtual bool process_event(HSMInfo *info = nullptr);
+	bool process_event(HSMInfo &info);
+	template<typename InfoType, typename... Args> bool process_event(Args&&... args) {
+		InfoType info(std::forward<Args>(args)...);
+		return process_event(&info);
+	}
 	
 	// Transition to a new state
 	// Returns false if the transition was not possible
 	bool transition_to(HSMState *new_state, HSMInfo *info = nullptr);
+	bool transition_to(HSMState *new_state, HSMInfo &info);
+	template<typename InfoType, typename... Args> bool transition_to(HSMState *new_state, Args&&... args) {
+		InfoType info(std::forward<Args>(args)...);
+		return transition_to(new_state, &info);
+	}
 	
 	// Returns true if current state is within the given state
 	bool within(HSMState *query);
