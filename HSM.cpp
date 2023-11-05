@@ -119,8 +119,8 @@ bool HSMachine::transition_to(HSMState *new_state, HSMInfo *info) {
 		
 		// Work down into default states
 		while(test_state->default_state) {
-			if(!test_state->default_state->can_enter(info)) return false;
 			test_state = test_state->default_state;
+			if(!test_state->can_enter(info)) return false;
 		}
 	}
 	
@@ -138,8 +138,8 @@ bool HSMachine::transition_to(HSMState *new_state, HSMInfo *info) {
 		} while(current_state != new_state);
 	
 	while(current_state->default_state) {
-		current_state->default_state->on_enter(info);
 		current_state = current_state->default_state;
+		current_state->on_enter(info);
 	}
 	
 	return true;
