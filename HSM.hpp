@@ -30,7 +30,7 @@ public:
 	
 	// Process an event
 	// Return true to consume
-	virtual bool process_event(HSMInfo *info);
+	virtual bool on_event(HSMInfo *info);
 	
 	// Add a child state
 	// Takes ownership of passed pointer
@@ -60,7 +60,7 @@ public:
 	
 	// Send an event to the active state and all parents until one consumes it
 	// Returns false if the event was not consumed
-	virtual bool process_event(HSMInfo *info = nullptr);
+	bool process_event(HSMInfo *info = nullptr);
 	bool process_event(HSMInfo &info);
 	template<typename InfoType, typename... Args> bool process_event(Args&&... args) {
 		InfoType info(std::forward<Args>(args)...);

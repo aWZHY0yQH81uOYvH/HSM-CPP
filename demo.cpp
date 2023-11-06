@@ -32,8 +32,8 @@ public:
 		cout << "on_exit " << name << endl;
 	}
 	
-	virtual bool process_event(HSMInfo *info) {
-		cout << "process_event " << name << endl;
+	virtual bool on_event(HSMInfo *info) {
+		cout << "on_event " << name << endl;
 		return name == "b";
 	}
 	
@@ -115,8 +115,8 @@ Example output
 	can_enter e
 	0
 	====
-	process_event d
-	process_event b
+	on_event d
+	on_event b
 	1
 	destroy e
 	destroy a

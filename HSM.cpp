@@ -32,7 +32,7 @@ void HSMState::on_exit(HSMInfo *info) {
 	(void)info;
 }
 
-bool HSMState::process_event(HSMInfo *info) {
+bool HSMState::on_event(HSMInfo *info) {
 	(void)info;
 	return false;
 }
@@ -89,7 +89,7 @@ bool HSMachine::process_event(HSMInfo *info) {
 	// Deliver event info to current state and work up while they're returning false
 	HSMState *exec_state = current_state;
 	while(exec_state != this) {
-		if(exec_state->process_event(info)) return true;
+		if(exec_state->on_event(info)) return true;
 		exec_state = exec_state->parent_state;
 	}
 	
