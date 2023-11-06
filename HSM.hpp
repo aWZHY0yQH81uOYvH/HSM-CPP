@@ -76,6 +76,14 @@ public:
 		return transition_to(new_state, &info);
 	}
 	
+	// Return if a transition is possible
+	bool can_transition_to(HSMState *new_state, HSMInfo *info = nullptr);
+	bool can_transition_to(HSMState *new_state, HSMInfo &info);
+	template<typename InfoType, typename... Args> bool can_transition_to(HSMState *new_state, Args&&... args) {
+		InfoType info(std::forward<Args>(args)...);
+		return can_transition_to(new_state, &info);
+	}
+	
 	// Returns true if current state is within the given state
 	bool within(HSMState *query);
 	

@@ -108,29 +108,8 @@ bool HSMachine::transition_to(HSMState *new_state, HSMInfo *info) {
 		return true;
 	
 	// Determine if we can transition to this state
-	{
-		// Work upwards to the state that contains or is the new_state
-		HSMState *test_state = current_state;
-		while(test_state != new_state
-			  && test_state->child_states.find(new_state) == test_state->child_states.end()) {
-			if(!test_state->can_exit(info)) return false;
-			test_state = test_state->parent_state;
-		}
-		
-		// Work downwards into the state that is new_state
-		// Do not try to enter if we came from a child state
-		if(test_state != new_state)
-			do {
-				test_state = test_state->child_states.find(new_state)->second;
-				if(!test_state->can_enter(info)) return false;
-			} while(test_state != new_state);
-		
-		// Work down into default states
-		while(test_state->default_state) {
-			test_state = test_state->default_state;
-			if(!test_state->can_enter(info)) return false;
-		}
-	}
+	if(!can_transition_to(new_state, info))
+		return false;
 	
 	// Actually exit/enter states
 	while(current_state != new_state
@@ -157,6 +136,42 @@ bool HSMachine::transition_to(HSMState *new_state, HSMInfo *info) {
 
 bool HSMachine::transition_to(HSMState *new_state, HSMInfo &info) {
 	return transition_to(new_state, &info);
+}
+
+bool HSMachine::can_transition_to(HSMState *new_state, HSMInfo *info) {
+	std::lock_guard<std::recursive_mutex> lock(exec_mutex);
+	
+	// Exit if we're already in this state
+	if(current_state == new_state)
+		return true;
+	
+	// Work upwards to the state that contains or is the new_state
+	HSMState *test_state = current_state;
+	while(test_state != new_state
+		&& test_state->child_states.find(new_state) == test_state->child_states.end()) {
+			if(!test_state->can_exit(info)) return false;
+			test_state = test_state->parent_state;
+		}
+	
+	// Work downwards into the state that is new_state
+	// Do not try to enter if we came from a child state
+	if(test_state != new_state)
+		do {
+			test_state = test_state->child_states.find(new_state)->second;
+			if(!test_state->can_enter(info)) return false;
+		} while(test_state != new_state);
+	
+	// Work down into default states
+	while(test_state->default_state) {
+		test_state = test_state->default_state;
+		if(!test_state->can_enter(info)) return false;
+	}
+	
+	return true;
+}
+
+bool HSMachine::can_transition_to(HSMState *new_state, HSMInfo &info) {
+	return can_transition_to(new_state, &info);
 }
 
 bool HSMachine::within(HSMState *query) {
