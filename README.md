@@ -11,7 +11,7 @@
 ### Usage
 
  1. Create a main `HSMachine` class. Optionally provide a callback function to run whenever a state transition happens in order to, for example, update a UI.
- 2. Subclass `HSMState` to create your custom states, overriding the `on_*`, `can_*` and `process_event` functions if desired.
+ 2. Subclass `HSMState` to create your custom states, overriding the `on_*` and `can_*` functions if desired.
  3. Optionally extend `HSMInfo` to create structs of information that can be passed to your `HSMState`-derived classes whenever a state transition or event occurs.
  4. Allocate instances of your states, keeping pointers to them. Each pointer is an individual state, meaning you can have multiple states in the hierarchy that are represented by the same `HSMState`-derived class.
  5. Create your hierarchy using the `add_child_state` function. This will take ownership of the pointers, and all state objects should be freed when the main `HSMachine` is destroyed, assuming there are no orphaned states. `assert` statements should ensure your machine is well-formed.
@@ -25,4 +25,4 @@ When a state transition is requested, `can_enter` and `can_exit` will be called 
 
 If the final state has any default state set, the path of default states are recursively followed. For any given state that has a default state, the machine should never come to rest at that given state.
 
-Events are processed starting from the current state and work upwards. If any `process_event` function returns true, the event is consumed and no further parent states will receive it.
+Events are processed starting from the current state and work upwards. If any `on_event` function returns true, the event is consumed and no further parent states will receive it.
