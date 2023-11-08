@@ -113,7 +113,7 @@ bool HSMachine::transition_to(HSMState *new_state, HSMInfo *info) {
 	
 	// Actually exit/enter states
 	while(current_state != new_state
-		  && current_state->child_states.find(new_state) == current_state->child_states.end()) {
+	      && current_state->child_states.find(new_state) == current_state->child_states.end()) {
 		current_state->on_exit(info);
 		current_state = current_state->parent_state;
 	}
@@ -148,10 +148,10 @@ bool HSMachine::can_transition_to(HSMState *new_state, HSMInfo *info) {
 	// Work upwards to the state that contains or is the new_state
 	HSMState *test_state = current_state;
 	while(test_state != new_state
-		&& test_state->child_states.find(new_state) == test_state->child_states.end()) {
-			if(!test_state->can_exit(info)) return false;
-			test_state = test_state->parent_state;
-		}
+	      && test_state->child_states.find(new_state) == test_state->child_states.end()) {
+		if(!test_state->can_exit(info)) return false;
+		test_state = test_state->parent_state;
+	}
 	
 	// Work downwards into the state that is new_state
 	// Do not try to enter if we came from a child state
