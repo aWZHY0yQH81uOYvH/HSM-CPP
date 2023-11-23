@@ -87,6 +87,9 @@ public:
 	// Returns true if current state is within the given state
 	bool within(HSMState *query);
 	
+	// Same as above but don't try to lock the access mutex
+	bool within_immediate(HSMState *query) const;
+	
 	HSMState *get_current_state();
 	
 	// Allow addition of child states
